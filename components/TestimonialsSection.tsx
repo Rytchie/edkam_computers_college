@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { TESTIMONIALS_DATA } from '../dist/assets/constants';
+import { TESTIMONIALS_DATA } from '../constants/constants';
 import TestimonialCard from './TestimonialCard';
 
 const TestimonialsSection: React.FC = () => {

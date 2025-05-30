@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 // FIX: NavLink type is imported from '../types'
-import { NAV_LINKS } from '../dist/assets/constants';
+import { NAV_LINKS } from '../constants/constants';
 import { NavLink } from '../types';
 
 const Navbar: React.FC = () => {

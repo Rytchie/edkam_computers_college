@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { COURSES_DATA } from '../dist/assets/constants';
+import { COURSES_DATA } from '../constants/constants';
 import CourseCard from './CourseCard';
 
 const CoursesSection: React.FC = () => {

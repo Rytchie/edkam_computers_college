@@ -1,7 +1,7 @@
 
 import React from 'react';
 // FIX: StatItem type is imported from '../types'
-import { STATS_DATA } from '../dist/assets/constants';
+import { STATS_DATA } from '../constants/constants';
 import { StatItem } from '../types';
 
 const AboutUsSection: React.FC = () => {

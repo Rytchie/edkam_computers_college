@@ -1,7 +1,7 @@
 
 import React from 'react';
 // FIX: Benefit type is imported from '../types'
-import { BENEFITS_DATA } from '../dist/assets/constants';
+import { BENEFITS_DATA } from '../constants/constants';
 import { Benefit } from '../types';
 
 const WhyChooseUsSection: React.FC = () => {

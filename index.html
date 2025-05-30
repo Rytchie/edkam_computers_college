@@ -1,0 +1,83 @@
+
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edkam Computers Training College</title>
+    <link rel="icon" href="/dist/assets/edkam.png" type="image/x-icon">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'brand-dark': '#060818',
+              'brand-dark-blue': '#0A0C2B',
+              'brand-light-text': '#E0E0E0',
+              'brand-secondary-text': '#A0A0B0',
+              'brand-accent-purple': '#A855F7', // purple-500
+              'brand-accent-blue': '#6366F1', // indigo-500
+            },
+            animation: {
+              'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+              'subtle-pulse': 'subtlePulse 2s infinite ease-in-out',
+              'gradient-bg': 'gradientBg 15s ease infinite',
+            },
+            keyframes: {
+              fadeInUp: {
+                '0%': { opacity: '0', transform: 'translateY(20px)' },
+                '100%': { opacity: '1', transform: 'translateY(0)' },
+              },
+              subtlePulse: {
+                '0%, 100%': { opacity: '1' },
+                '50%': { opacity: '.7' },
+              },
+              gradientBg: {
+                '0%, 100%': { backgroundPosition: '0% 50%' },
+                '50%': { backgroundPosition: '100% 50%' },
+              }
+            },
+            backgroundImage: {
+              'animated-gradient': 'linear-gradient(-45deg, #0F172A, #1E1B4B, #312E81, #4F46E5)',
+            },
+            backgroundSize: {
+              '400%': '400% 400%',
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      /* For custom scrollbar, optional */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #0F172A; /* slate-900 */
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #4F46E5; /* indigo-600 */
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #312E81; /* indigo-800 */
+      }
+    </style>
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@^19.1.0",
+    "react-dom/": "https://esm.sh/react-dom@^19.1.0/",
+    "react/": "https://esm.sh/react@^19.1.0/"
+  }
+}
+</script>
+</head>
+<body class="bg-brand-dark text-brand-light-text antialiased">
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+</body>
+</html>
+<link rel="stylesheet" href="index.css">
+<script src="index.tsx" type="module"></script>

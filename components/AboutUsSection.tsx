@@ -20,7 +20,7 @@ const AboutUsSection: React.FC = () => {
               We believe in a practical, hands-on approach to learning, ensuring our students are not just theoretically sound but also job-ready. Our experienced instructors, state-of-the-art facilities, and strong industry connections make Edkam the ideal place to start or advance your tech career.
             </p>
             <img 
-              src="https://picsum.photos/seed/collegeinterior/600/400" 
+              src="../public/sessions_learning.jpg" 
               alt="College interior" 
               className="rounded-lg shadow-xl object-cover w-full"
             />

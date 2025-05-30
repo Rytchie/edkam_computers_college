@@ -9,11 +9,17 @@ export interface NavLink {
 export interface Course {
   id: string;
   title: string;
-  description: string;
+  description: string; // Short description for the front
   icon?: React.ReactNode;
   duration: string;
   image: string;
   tags: string[];
+  // New fields for the back of the card
+  detailedDescription?: string; // Optional longer description
+  learningOutcomes: string[];
+  modulesCovered: string[];
+  targetAudience: string;
+  prerequisites: string[];
 }
 
 export interface Testimonial {
@@ -34,4 +40,19 @@ export interface Benefit {
   title: string;
   description: string;
   icon: React.ReactNode;
+}
+
+export interface ApplicationFormData {
+  fullName: string;
+  email: string;
+  phone?: string;
+  dateOfBirth?: string;
+  address?: string;
+  courseId: string;
+  applicationType: string;
+  previousInstitution?: string;
+  highestQualification?: string;
+  statementOfPurpose: string;
+  cv?: File | null;
+  transcripts?: File | null;
 }

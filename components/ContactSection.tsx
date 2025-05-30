@@ -3,9 +3,9 @@ import React from 'react';
 import Button from './Button';
 
 const ContactSection: React.FC = () => {
-  // Basic form state, can be expanded
   const [formData, setFormData] = React.useState({ name: '', email: '', message: '' });
   const [isSubmitted, setIsSubmitted] = React.useState(false);
+  const [formError, setFormError] = React.useState<string | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
@@ -13,16 +13,44 @@ const ContactSection: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Basic validation
-    if (formData.name && formData.email && formData.message) {
-      // Here you would typically send the data to a backend
-      console.log('Form data submitted:', formData);
+    setFormError(null); // Reset error message
+    setIsSubmitted(false); // Reset submission status
+
+    if (!formData.name || !formData.email || !formData.message) {
+      setFormError('Please fill in all fields.');
+      return;
+    }
+
+    const recipient = 'edkamcomputerstrainingcollege@gmail.com';
+    const subject = encodeURIComponent(`Contact Form Inquiry from ${formData.name}`);
+    const body = encodeURIComponent(
+`Hello Edkam Computers Training College,
+
+You have a new inquiry from your website contact form:
+
+Name: ${formData.name}
+Email: ${formData.email}
+
+Message:
+${formData.message}
+
+---
+This email was pre-filled by the contact form on your website.
+`
+    );
+
+    const mailtoLink = `mailto:${recipient}?subject=${subject}&body=${body}`;
+
+    try {
+      window.location.href = mailtoLink;
       setIsSubmitted(true);
       setFormData({ name: '', email: '', message: ''}); // Reset form
+
       // Hide success message after some time
-      setTimeout(() => setIsSubmitted(false), 5000);
-    } else {
-      alert('Please fill in all fields.');
+      setTimeout(() => setIsSubmitted(false), 7000);
+    } catch (error) {
+      console.error("Failed to open email client:", error);
+      setFormError("Could not open your email client. Please copy the details manually or try again.");
     }
   };
 
@@ -43,8 +71,13 @@ const ContactSection: React.FC = () => {
           <div className="bg-slate-800/50 backdrop-blur-sm p-8 rounded-xl shadow-xl animate-fade-in-up">
             <h3 className="text-2xl font-semibold text-white mb-6">Send us a Message</h3>
             {isSubmitted && (
-              <div className="mb-4 p-4 bg-green-600/30 text-green-300 border border-green-500 rounded-md">
-                Thank you for your message! We'll get back to you soon.
+              <div className="mb-4 p-4 bg-green-600/30 text-green-300 border border-green-500 rounded-md" role="alert">
+                Your email client should open shortly with a pre-filled message. Please review and send it. If it doesn't open, please check your browser settings or manually email us.
+              </div>
+            )}
+            {formError && (
+              <div className="mb-4 p-4 bg-red-600/30 text-red-300 border border-red-500 rounded-md" role="alert">
+                {formError}
               </div>
             )}
             <form onSubmit={handleSubmit} className="space-y-6">
@@ -57,6 +90,7 @@ const ContactSection: React.FC = () => {
                   value={formData.name}
                   onChange={handleChange}
                   required
+                  aria-required="true"
                   className="mt-1 block w-full bg-slate-700 border-slate-600 rounded-md shadow-sm py-3 px-4 text-brand-light-text focus:ring-brand-accent-blue focus:border-brand-accent-blue sm:text-sm" 
                 />
               </div>
@@ -69,6 +103,7 @@ const ContactSection: React.FC = () => {
                   value={formData.email}
                   onChange={handleChange}
                   required
+                  aria-required="true"
                   className="mt-1 block w-full bg-slate-700 border-slate-600 rounded-md shadow-sm py-3 px-4 text-brand-light-text focus:ring-brand-accent-blue focus:border-brand-accent-blue sm:text-sm" 
                 />
               </div>
@@ -81,11 +116,12 @@ const ContactSection: React.FC = () => {
                   value={formData.message}
                   onChange={handleChange}
                   required
+                  aria-required="true"
                   className="mt-1 block w-full bg-slate-700 border-slate-600 rounded-md shadow-sm py-3 px-4 text-brand-light-text focus:ring-brand-accent-blue focus:border-brand-accent-blue sm:text-sm"
                 ></textarea>
               </div>
               <div>
-                <Button type="submit" variant="primary" className="w-full">Send Message</Button>
+                <Button type="submit" variant="primary" className="w-full">Prepare Email</Button>
               </div>
             </form>
           </div>
@@ -95,16 +131,16 @@ const ContactSection: React.FC = () => {
               <h3 className="text-2xl font-semibold text-white mb-4">Contact Information</h3>
               <ul className="space-y-3 text-brand-secondary-text">
                 <li className="flex items-center">
-                  <svg className="w-6 h-6 text-brand-accent-purple mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                  <svg className="w-6 h-6 text-brand-accent-purple mr-3 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                   Maili Kumi, Nakuru, Kenya
                 </li>
                 <li className="flex items-center">
-                  <svg className="w-6 h-6 text-brand-accent-purple mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.308 1.154a11.034 11.034 0 005.37 5.37l1.153-2.308a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
-                  +254 (799) 598-942
+                  <svg className="w-6 h-6 text-brand-accent-purple mr-3 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.308 1.154a11.034 11.034 0 005.37 5.37l1.153-2.308a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
+                  <a href="tel:+254799598942" className="hover:text-brand-accent-blue">+254 (799) 598-942</a>
                 </li>
                 <li className="flex items-center">
-                  <svg className="w-6 h-6 text-brand-accent-purple mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                  edkamcomputerstrainingcollege@gmail.com
+                  <svg className="w-6 h-6 text-brand-accent-purple mr-3 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                  <a href="mailto:edkamcomputerstrainingcollege@gmail.com" className="hover:text-brand-accent-blue break-all">edkamcomputerstrainingcollege@gmail.com</a>
                 </li>
               </ul>
             </div>
@@ -118,7 +154,8 @@ const ContactSection: React.FC = () => {
                         style={{ border:0 }} 
                         allowFullScreen={true}
                         loading="lazy"
-                        title="Google Maps Location of Edkam Computers (Placeholder)"
+                        title="Google Maps Location of Edkam Computers Training College"
+                        aria-label="Google Maps Location of Edkam Computers Training College"
                     ></iframe>
                 </div>
             </div>

@@ -29,14 +29,14 @@ const HeroSection: React.FC = () => {
               <Button 
                 variant="primary" 
                 size="lg"
-                onClick={() => window.location.href = '#contact'}
+                onClick={() => window.location.hash = 'apply'} // Updated onClick
               >
                 Apply Now
               </Button>
               <Button 
                 variant="outline" 
                 size="lg"
-                onClick={() => window.location.href = '#courses'}
+                onClick={() => window.location.hash = 'courses'} // Keep as hash for main page scroll
                 className="border-brand-accent-purple text-brand-accent-purple hover:bg-brand-accent-purple hover:text-white focus:ring-brand-accent-purple"
               >
                 View Courses
@@ -45,7 +45,7 @@ const HeroSection: React.FC = () => {
           </div>
           <div className={`relative mt-12 md:mt-0 transition-all duration-1000 ease-out delay-300 ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-90'}`}>
             <img
-              src="https://picsum.photos/seed/collegecampus/800/600" 
+              src="https://picsum.photos/seed/graduation/800/600" 
               alt="Edkam Computers Training College Campus"
               className="rounded-xl shadow-2xl object-cover w-full h-auto md:h-[500px] transform hover:scale-105 transition-transform duration-500 ease-out"
             />

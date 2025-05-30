@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <link rel="icon" href="/Public/edkam.png" type="image/x-icon">
     <title>Edkam Computers Training College</title>
-    <link rel="icon" href="/Public/edkam.png" type="image/x-icon">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
@@ -23,6 +23,8 @@
               'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
               'subtle-pulse': 'subtlePulse 2s infinite ease-in-out',
               'gradient-bg': 'gradientBg 15s ease infinite',
+              'slide-in-from-left': 'slideInFromLeft 0.8s ease-out forwards',
+              'slide-infinite-horizontal': 'slideInfiniteHorizontal 60s linear infinite', 
             },
             keyframes: {
               fadeInUp: {
@@ -36,22 +38,34 @@
               gradientBg: {
                 '0%, 100%': { backgroundPosition: '0% 50%' },
                 '50%': { backgroundPosition: '100% 50%' },
-              }
+              },
+              slideInFromLeft: {
+                '0%': { opacity: '0', transform: 'translateX(-50px)' },
+                '100%': { opacity: '1', transform: 'translateX(0)' },
+              },
+              slideInfiniteHorizontal: {
+                '0%': { transform: 'translateX(0)' },
+                '100%': { transform: 'translateX(-50%)' }, 
+              },
             },
             backgroundImage: {
               'animated-gradient': 'linear-gradient(-45deg, #0F172A, #1E1B4B, #312E81, #4F46E5)',
             },
             backgroundSize: {
               '400%': '400% 400%',
+            },
+            rotate: { // Ensuring rotate-y-180 is available if not by default
+              'y-180': 'rotateY(180deg)',
             }
           }
         }
       }
     </script>
     <style>
-      /* For custom scrollbar, optional */
+      /* General page scrollbar */
       ::-webkit-scrollbar {
         width: 8px;
+        height: 8px;
       }
       ::-webkit-scrollbar-track {
         background: #0F172A; /* slate-900 */
@@ -63,13 +77,44 @@
       ::-webkit-scrollbar-thumb:hover {
         background: #312E81; /* indigo-800 */
       }
+
+      /* Custom slim scrollbar for card back content */
+      .custom-scrollbar-sm::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+      }
+      .custom-scrollbar-sm::-webkit-scrollbar-track {
+        background: rgba(15, 23, 42, 0.3); /* slate-900 with transparency */
+        border-radius: 3px;
+      }
+      .custom-scrollbar-sm::-webkit-scrollbar-thumb {
+        background: #6366F1; /* brand-accent-blue */
+        border-radius: 3px;
+      }
+      .custom-scrollbar-sm::-webkit-scrollbar-thumb:hover {
+        background: #4F46E5; /* indigo-600 (a bit darker shade of accent blue) */
+      }
+      /* For Firefox */
+      .custom-scrollbar-sm {
+        scrollbar-width: thin;
+        scrollbar-color: #6366F1 rgba(15, 23, 42, 0.3);
+      }
+
+      /* Ensure line-clamp works */
+      .line-clamp-3 {
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
+      }
     </style>
 <script type="importmap">
 {
   "imports": {
     "react": "https://esm.sh/react@^19.1.0",
     "react-dom/": "https://esm.sh/react-dom@^19.1.0/",
-    "react/": "https://esm.sh/react@^19.1.0/"
+    "react/": "https://esm.sh/react@^19.1.0/",
+    "@/Button": "/components/Button.tsx"
   }
 }
 </script>
@@ -79,5 +124,3 @@
     <script type="module" src="/index.tsx"></script>
 </body>
 </html>
-<link rel="stylesheet" href="index.css">
-<script src="index.tsx" type="module"></script>

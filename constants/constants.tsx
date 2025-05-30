@@ -21,6 +21,19 @@ const ShieldIcon: React.FC<{ className?: string }> = ({ className }) => (
   </svg>
 );
 
+const DesktopIcon: React.FC<{ className?: string }> = ({ className }) => (
+  <svg className={className} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+    <path strokeLinecap="round" strokeLinejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+  </svg>
+);
+
+const PaletteIcon: React.FC<{ className?: string }> = ({ className }) => (
+  <svg className={className} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+    <path strokeLinecap="round" strokeLinejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732zM12 21a9 9 0 110-18 9 9 0 010 18z" />
+  </svg>
+);
+
+
 const CheckIcon: React.FC<{ className?: string }> = ({ className }) => (
   <svg className={className} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
     <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
@@ -46,59 +59,151 @@ export const NAV_LINKS: NavLink[] = [
   { href: '#about', label: 'About Us' },
   { href: '#testimonials', label: 'Testimonials' },
   { href: '#contact', label: 'Contact' },
+  { href: '#portal', label: 'Student Portal' },
 ];
 
 export const COURSES_DATA: Course[] = [
   {
     id: 'webdev',
     title: 'Full-Stack Web Development',
-    description: 'Master front-end and back-end technologies to build complete web applications. Covers React, Node.js, Express, MongoDB and more.',
+    description: 'Master front-end and back-end technologies to build complete web applications.',
     icon: <CodeIcon className="w-12 h-12 text-brand-accent-blue mb-4" />,
     duration: '6 Months',
-    image: 'https://picsum.photos/seed/webdev/400/250',
-    tags: ['React', 'Node.js', 'JavaScript', 'Full-Stack']
+    image: 'https://picsum.photos/seed/webdev_course/400/250',
+    tags: ['React', 'Node.js', 'JavaScript', 'Full-Stack'],
+    detailedDescription: 'This comprehensive program covers everything from client-side JavaScript frameworks like React to server-side development with Node.js and Express, along with database management using MongoDB. Ideal for aspiring web developers.',
+    learningOutcomes: [
+      'Build responsive UIs with React.',
+      'Develop robust APIs with Node.js & Express.',
+      'Manage databases with MongoDB.',
+      'Understand full-stack architecture.',
+      'Deploy web applications.'
+    ],
+    modulesCovered: ['HTML, CSS, JavaScript', 'React & Redux', 'Node.js & Express', 'MongoDB', 'REST APIs', 'Authentication', 'Deployment'],
+    targetAudience: 'Beginners and intermediate developers looking to become full-stack proficient.',
+    prerequisites: ['Basic computer literacy. Prior programming experience is helpful but not required.']
   },
   {
     id: 'datasci',
     title: 'Data Science & Machine Learning',
-    description: 'Dive into data analysis, visualization, and machine learning algorithms. Learn Python, Pandas, Scikit-learn, and TensorFlow.',
+    description: 'Dive into data analysis, visualization, and machine learning algorithms.',
     icon: <DataIcon className="w-12 h-12 text-brand-accent-purple mb-4" />,
     duration: '8 Months',
-    image: 'https://picsum.photos/seed/datasci/400/250',
-    tags: ['Python', 'AI/ML', 'Statistics', 'Big Data']
+    image: 'https://picsum.photos/seed/datasci_course/400/250',
+    tags: ['Python', 'AI/ML', 'Statistics', 'Big Data'],
+    detailedDescription: 'Explore the world of data! This course teaches you to extract insights from data using Python, statistical techniques, and machine learning models with libraries like Pandas, Scikit-learn, and TensorFlow.',
+    learningOutcomes: [
+      'Perform data analysis and visualization using Python.',
+      'Implement various machine learning algorithms.',
+      'Understand statistical concepts for data science.',
+      'Work with large datasets.',
+      'Develop predictive models.'
+    ],
+    modulesCovered: ['Python for Data Science', 'Data Wrangling with Pandas', 'Data Visualization', 'Statistics & Probability', 'Machine Learning Algorithms', 'Deep Learning with TensorFlow/Keras', 'Big Data Fundamentals'],
+    targetAudience: 'Aspiring data scientists, analysts, and anyone interested in AI/ML.',
+    prerequisites: ['Basic Python programming knowledge recommended. Strong mathematical aptitude is a plus.']
   },
   {
     id: 'cybersec',
     title: 'Cybersecurity Analyst Pro',
-    description: 'Protect digital assets with cutting-edge cybersecurity skills. Explore network security, ethical hacking, and incident response.',
+    description: 'Protect digital assets with cutting-edge cybersecurity skills.',
     icon: <ShieldIcon className="w-12 h-12 text-green-400 mb-4" />,
     duration: '7 Months',
-    image: 'https://picsum.photos/seed/cybersec/400/250',
-    tags: ['Security', 'Networking', 'Ethical Hacking']
+    image: 'https://picsum.photos/seed/cybersec_course/400/250',
+    tags: ['Security', 'Networking', 'Ethical Hacking'],
+    detailedDescription: 'Become a cybersecurity professional. This course covers network security, ethical hacking techniques, cryptography, risk management, and incident response to safeguard organizations from cyber threats.',
+    learningOutcomes: [
+      'Identify and mitigate security vulnerabilities.',
+      'Understand network security protocols and tools.',
+      'Perform ethical hacking and penetration testing.',
+      'Implement security best practices.',
+      'Respond to security incidents effectively.'
+    ],
+    modulesCovered: ['Introduction to Cybersecurity', 'Network Security', 'Ethical Hacking', 'Cryptography', 'Web Application Security', 'Risk Management', 'Incident Response & Forensics'],
+    targetAudience: 'Individuals aiming for roles like Security Analyst, Penetration Tester, or IT Security Specialist.',
+    prerequisites: ['Understanding of networking concepts and operating systems.']
   },
+  {
+    id: 'itoffice',
+    title: 'Essential IT & Office Productivity',
+    description: 'Master essential computer skills and popular office software for everyday productivity.',
+    icon: <DesktopIcon className="w-12 h-12 text-blue-400 mb-4" />,
+    duration: '3 Months',
+    image: 'https://picsum.photos/seed/itoffice_course/400/250',
+    tags: ['MS Office', 'Computer Basics', 'Productivity', 'Digital Literacy'],
+    detailedDescription: 'This foundational course is designed to equip you with crucial IT literacy and proficiency in widely-used office applications. Perfect for students, job seekers, or anyone looking to enhance their digital skills for personal or professional use.',
+    learningOutcomes: [
+      'Navigate computer operating systems efficiently.',
+      'Create professional documents using Microsoft Word.',
+      'Analyze data and create spreadsheets with Microsoft Excel.',
+      'Design engaging presentations with Microsoft PowerPoint.',
+      'Manage emails and schedules effectively with Microsoft Outlook.',
+      'Understand internet browsing, online safety, and cloud storage.'
+    ],
+    modulesCovered: ['Computer Fundamentals & OS', 'Microsoft Word (Beginner to Advanced)', 'Microsoft Excel (Beginner to Advanced)', 'Microsoft PowerPoint', 'Microsoft Outlook & Email Etiquette', 'Internet & Web Browsing', 'Online Collaboration Tools', 'Basic Troubleshooting'],
+    targetAudience: 'Absolute beginners, students, office workers, and anyone looking to improve their core IT and office software skills.',
+    prerequisites: ['No prior experience required.']
+  },
+  {
+    id: 'graphicdesign',
+    title: 'Graphic Design Fundamentals',
+    description: 'Unleash your creativity by learning the core principles and tools of graphic design.',
+    icon: <PaletteIcon className="w-12 h-12 text-pink-400 mb-4" />,
+    duration: '4 Months',
+    image: 'https://picsum.photos/seed/graphicdesign_course/400/250',
+    tags: ['Design', 'Visual Arts', 'Branding', 'Creativity'],
+    detailedDescription: 'Dive into the exciting field of graphic design. This course introduces fundamental design principles, color theory, typography, layout techniques, and an overview of industry-standard software concepts for creating compelling visual communication.',
+    learningOutcomes: [
+      'Understand core design principles (balance, contrast, hierarchy, etc.).',
+      'Apply color theory effectively in designs.',
+      'Master typography basics for impactful text.',
+      'Create balanced and visually appealing layouts.',
+      'Develop a foundational understanding of branding and visual identity.',
+      'Gain familiarity with common graphic design workflows and software concepts (e.g., vector vs. raster, layers).'
+    ],
+    modulesCovered: ['Introduction to Graphic Design', 'Elements & Principles of Design', 'Color Theory', 'Typography', 'Layout & Composition', 'Introduction to Branding & Logo Design', 'Image Editing Basics', 'Vector Graphics Concepts', 'Portfolio Development Tips'],
+    targetAudience: 'Aspiring graphic designers, marketers, content creators, or anyone interested in visual communication.',
+    prerequisites: ['Basic computer skills. A passion for creativity is a must!']
+  }
+];
+
+export const APPLICATION_TYPES: string[] = [
+  "New Student Admission",
+  "Scholarship Application",
+  "Continuing Education Program",
+  "Transfer Student Application",
+  "Short Course / Workshop Registration",
+  "Professional Certificate Program",
 ];
 
 export const TESTIMONIALS_DATA: Testimonial[] = [
   {
     id: 't1',
-    name: 'Rytchie M.',
+    name: 'Jane Mwangi',
     feedback: 'The Full-Stack course was incredibly comprehensive and the instructors were top-notch. I landed my dream job just weeks after graduating!',
     course: 'Full-Stack Web Development',
-    avatar: 'https://picsum.photos/seed/sarah/100/100',
+    avatar: 'https://picsum.photos/seed/jane_mwangi_avatar/100/100',
   },
   {
     id: 't2',
-    name: 'Pshens K.',
+    name: 'John Kamau',
     feedback: "Edkam's Data Science program transformed my career. The hands-on projects were invaluable. Highly recommend!",
     course: 'Data Science & Machine Learning',
-    avatar: 'https://picsum.photos/seed/michael/100/100',
+    avatar: 'https://picsum.photos/seed/john_kamau_avatar/100/100',
   },
   {
     id: 't3',
-    name: 'Dennis K.',
+    name: 'Grace Akinyi',
     feedback: 'I always wanted to get into cybersecurity, and Edkam made it possible. The learning environment is supportive and challenging.',
     course: 'Cybersecurity Analyst Pro',
-    avatar: 'https://picsum.photos/seed/linda/100/100',
+    avatar: 'https://picsum.photos/seed/grace_akinyi_avatar/100/100',
+  },
+  {
+    id: 't4',
+    name: 'Peter Njoroge',
+    feedback: 'The practical skills I gained at Edkam were instrumental in launching my tech career. The instructors are truly dedicated.',
+    course: 'Full-Stack Web Development',
+    avatar: 'https://picsum.photos/seed/peter_njoroge_avatar/100/100',
   },
 ];
 

@@ -1,6 +1,4 @@
-
 import React from 'react';
-// FIX: StatItem type is imported from '../types'
 import { STATS_DATA } from '../constants/constants';
 import { StatItem } from '../types';
 
@@ -20,7 +18,7 @@ const AboutUsSection: React.FC = () => {
               We believe in a practical, hands-on approach to learning, ensuring our students are not just theoretically sound but also job-ready. Our experienced instructors, state-of-the-art facilities, and strong industry connections make Edkam the ideal place to start or advance your tech career.
             </p>
             <img 
-              src="../public/sessions_learning.jpg" 
+              src="/sessions_learning.jpg" 
               alt="College interior" 
               className="rounded-lg shadow-xl object-cover w-full"
             />
@@ -32,8 +30,7 @@ const AboutUsSection: React.FC = () => {
                 <div className="text-sm md:text-base text-brand-light-text">{stat.label}</div>
               </div>
             ))}
-             <div className="md:col-span-2 bg-slate-800/70 p-6 rounded-lg shadow-lg text-center transition-transform duration-300 hover:scale-105 hover:shadow-brand-accent-blue/30">
-                <img src="https://picsum.photos/seed/team/500/250" alt="Our Team" className="w-full h-48 object-cover rounded-md mb-4"/>
+            <div className="md:col-span-2 bg-slate-800/70 p-6 rounded-lg shadow-lg text-center transition-transform duration-300 hover:scale-105 hover:shadow-brand-accent-blue/30">
                 <h3 className="text-xl font-semibold text-brand-accent-blue mb-2">Dedicated Faculty</h3>
                 <p className="text-sm text-brand-secondary-text">Our team of passionate educators and industry experts are committed to your success.</p>
             </div>

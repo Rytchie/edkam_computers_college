@@ -1,4 +1,3 @@
-
 import React from 'react';
 
 export interface NavLink {
@@ -31,8 +30,8 @@ export interface Testimonial {
 }
 
 export interface StatItem {
-    value: string;
-    label: string;
+  value: string;
+  label: string;
 }
 
 export interface Benefit {
@@ -55,4 +54,17 @@ export interface ApplicationFormData {
   statementOfPurpose: string;
   cv?: File | null;
   transcripts?: File | null;
+}
+
+export interface FAQItem {
+  id: string;
+  question: string;
+  answer: string;
+}
+
+export interface ChatMessage {
+  id: string;
+  sender: 'user' | 'bot';
+  text: string;
+  timestamp: number;
 }

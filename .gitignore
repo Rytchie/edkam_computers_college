@@ -7,10 +7,21 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Dependency directories
 node_modules
 dist
 dist-ssr
-*.local
+
+# Local env files
+.env.local
+.env.*.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Optional: ignore all env files (if you don’t wanna track any)
+# .env
+# .env.*
 
 # Editor directories and files
 .vscode/*
@@ -22,7 +33,3 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-
-# Environment variables
-.env
-.env.*

@@ -30,8 +30,8 @@ export interface Testimonial {
 }
 
 export interface StatItem {
-  value: string;
-  label: string;
+    value: string;
+    label: string;
 }
 
 export interface Benefit {

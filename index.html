@@ -3,144 +3,186 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="/Public/edkam.png" type="image/x-icon">
+     <link rel="icon" href="/Public/edkam.png" type="image/x-icon">
     <title>Edkam Computers Training College</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'brand-dark': '#060818',
-                        'brand-dark-blue': '#0A0C2B',
-                        'brand-light-text': '#E0E0E0',
-                        'brand-secondary-text': '#A0A0B0',
-                        'brand-accent-purple': '#A855F7', // purple-500
-                        'brand-accent-blue': '#6366F1', // indigo-500
-                    },
-                    animation: {
-                        'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
-                        'subtle-pulse': 'subtlePulse 2s infinite ease-in-out',
-                        'gradient-bg': 'gradientBg 15s ease infinite',
-                        'slide-in-from-left': 'slideInFromLeft 0.8s ease-out forwards',
-                        'slide-infinite-horizontal': 'slideInfiniteHorizontal 60s linear infinite',
-                        'chat-window-in': 'chatWindowIn 0.3s ease-out forwards',
-                        'chat-window-out': 'chatWindowOut 0.3s ease-in forwards',
-                        'faq-expand': 'faqExpand 0.3s ease-out',
-                        'faq-collapse': 'faqCollapse 0.3s ease-out',
-                    },
-                    keyframes: {
-                        fadeInUp: {
-                            '0%': { opacity: '0', transform: 'translateY(20px)' },
-                            '100%': { opacity: '1', transform: 'translateY(0)' },
-                        },
-                        subtlePulse: {
-                            '0%, 100%': { opacity: '1' },
-                            '50%': { opacity: '.7' },
-                        },
-                        gradientBg: {
-                            '0%, 100%': { backgroundPosition: '0% 50%' },
-                            '50%': { backgroundPosition: '100% 50%' },
-                        },
-                        slideInFromLeft: {
-                            '0%': { opacity: '0', transform: 'translateX(-50px)' },
-                            '100%': { opacity: '1', transform: 'translateX(0)' },
-                        },
-                        slideInfiniteHorizontal: {
-                            '0%': { transform: 'translateX(0)' },
-                            '100%': { transform: 'translateX(-50%)' },
-                        },
-                        chatWindowIn: {
-                            '0%': { opacity: '0', transform: 'translateY(20px) scale(0.95)' },
-                            '100%': { opacity: '1', transform: 'translateY(0) scale(1)' },
-                        },
-                        chatWindowOut: {
-                            '0%': { opacity: '1', transform: 'translateY(0) scale(1)' },
-                            '100%': { opacity: '0', transform: 'translateY(20px) scale(0.95)' },
-                        },
-                        faqExpand: {
-                            '0%': { maxHeight: '0px', opacity: '0' },
-                            '100%': { maxHeight: '500px', opacity: '1' }, // Adjust maxHeight as needed
-                        },
-                        faqCollapse: {
-                            '0%': { maxHeight: '500px', opacity: '1' },
-                            '100%': { maxHeight: '0px', opacity: '0' },
-                        }
-                    },
-                    backgroundImage: {
-                        'animated-gradient': 'linear-gradient(-45deg, #0F172A, #1E1B4B, #312E81, #4F46E5)',
-                    },
-                    backgroundSize: {
-                        '400%': '400% 400%',
-                    },
-                    rotate: { // Ensuring rotate-y-180 is available if not by default
-                        'y-180': 'rotateY(180deg)',
-                    }
-                }
+      tailwind.config = {
+        darkMode: 'class', // Enable class-based dark mode
+        theme: {
+          extend: {
+            colors: {
+              // Existing dark mode colors (will be used with dark: prefix)
+              'brand-dark': '#060818',
+              'brand-dark-blue': '#0A0C2B',
+              'brand-light-text': '#E0E0E0', // Text on dark backgrounds
+              'brand-secondary-text': '#A0A0B0', // Secondary text on dark backgrounds
+
+              // New light mode colors
+              'brand-bg-light': '#F8FAFC', // slate-50 (main page background)
+              'brand-bg-light-card': '#FFFFFF', // white (for cards, modals)
+              'brand-bg-light-section': '#F1F5F9', // slate-100 (for sections like AboutUs)
+              'brand-bg-light-hover': '#E2E8F0', // slate-200 (for hover states on light elements)
+              'brand-text-light-primary': '#0F172A', // slate-900 (primary text)
+              'brand-text-light-secondary': '#475569', // slate-600 (secondary text)
+              'brand-border-light': '#CBD5E1', // slate-300 (borders in light mode)
+              'brand-border-light-strong': '#94A3B8', // slate-400 (stronger borders in light mode)
+
+
+              // Accent colors (can remain the same or have light/dark variants if needed)
+              'brand-accent-purple': '#A855F7', // purple-500
+              'brand-accent-blue': '#6366F1', // indigo-500
+            },
+            animation: {
+              'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+              'subtle-pulse': 'subtlePulse 2s infinite ease-in-out',
+              'gradient-bg': 'gradientBg 15s ease infinite',
+              'slide-in-from-left': 'slideInFromLeft 0.8s ease-out forwards',
+              'slide-infinite-horizontal': 'slideInfiniteHorizontal 60s linear infinite',
+              'chat-window-in': 'chatWindowIn 0.3s ease-out forwards',
+              'chat-window-out': 'chatWindowOut 0.3s ease-in forwards',
+              'faq-expand': 'faqExpand 0.3s ease-out',
+              'faq-collapse': 'faqCollapse 0.3s ease-out',
+            },
+            keyframes: {
+              fadeInUp: {
+                '0%': { opacity: '0', transform: 'translateY(20px)' },
+                '100%': { opacity: '1', transform: 'translateY(0)' },
+              },
+              subtlePulse: {
+                '0%, 100%': { opacity: '1' },
+                '50%': { opacity: '.7' },
+              },
+              gradientBg: {
+                '0%, 100%': { backgroundPosition: '0% 50%' },
+                '50%': { backgroundPosition: '100% 50%' },
+              },
+              slideInFromLeft: {
+                '0%': { opacity: '0', transform: 'translateX(-50px)' },
+                '100%': { opacity: '1', transform: 'translateX(0)' },
+              },
+              slideInfiniteHorizontal: {
+                '0%': { transform: 'translateX(0)' },
+                '100%': { transform: 'translateX(-50%)' },
+              },
+              chatWindowIn: {
+                '0%': { opacity: '0', transform: 'translateY(20px) scale(0.95)' },
+                '100%': { opacity: '1', transform: 'translateY(0) scale(1)' },
+              },
+              chatWindowOut: {
+                '0%': { opacity: '1', transform: 'translateY(0) scale(1)' },
+                '100%': { opacity: '0', transform: 'translateY(20px) scale(0.95)' },
+              },
+              faqExpand: {
+                '0%': { maxHeight: '0px', opacity: '0' },
+                '100%': { maxHeight: '500px', opacity: '1' }, // Adjust maxHeight as needed
+              },
+              faqCollapse: {
+                '0%': { maxHeight: '500px', opacity: '1' },
+                '100%': { maxHeight: '0px', opacity: '0' },
+              }
+            },
+            backgroundImage: {
+              'animated-gradient': 'linear-gradient(-45deg, #0F172A, #1E1B4B, #312E81, #4F46E5)', // Dark gradient
+              'animated-gradient-light': 'linear-gradient(-45deg, #E0E7FF, #C7D2FE, #A5B4FC, #818CF8)', // Light gradient
+            },
+            backgroundSize: {
+              '400%': '400% 400%',
+            },
+            rotate: {
+              'y-180': 'rotateY(180deg)',
             }
-        }
-    </script>
-    <style>
-        /* General page scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #0F172A; /* slate-900 */
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #4F46E5; /* indigo-600 */
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #312E81; /* indigo-800 */
-        }
-
-        /* Custom slim scrollbar for card back content AND CHAT */
-        .custom-scrollbar-sm::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-        .custom-scrollbar-sm::-webkit-scrollbar-track {
-            background: rgba(15, 23, 42, 0.3); /* slate-900 with transparency */
-            border-radius: 3px;
-        }
-        .custom-scrollbar-sm::-webkit-scrollbar-thumb {
-            background: #6366F1; /* brand-accent-blue */
-            border-radius: 3px;
-        }
-        .custom-scrollbar-sm::-webkit-scrollbar-thumb:hover {
-            background: #4F46E5; /* indigo-600 (a bit darker shade of accent blue) */
-        }
-        /* For Firefox */
-        .custom-scrollbar-sm {
-            scrollbar-width: thin;
-            scrollbar-color: #6366F1 rgba(15, 23, 42, 0.3);
-        }
-
-        /* Ensure line-clamp works */
-        .line-clamp-3 {
-            overflow: hidden;
-            display: -webkit-box;
-            -webkit-box-orient: vertical;
-            -webkit-line-clamp: 3;
-        }
-    </style>
-    <script type="importmap">
-        {
-          "imports": {
-            "react": "https://esm.sh/react@^19.1.0",
-            "react-dom/": "https://esm.sh/react-dom@^19.1.0/",
-            "react/": "https://esm.sh/react@^19.1.0/",
-            "@/Button": "/components/Button.tsx",
-            "@google/genai": "https://esm.sh/@google/genai"
           }
         }
+      }
     </script>
+    <style>
+      /* General page scrollbar */
+      ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+      html:not(.dark) ::-webkit-scrollbar-track {
+        background: #e2e8f0; /* slate-200 */
+      }
+      html.dark ::-webkit-scrollbar-track {
+        background: #0F172A; /* slate-900 */
+      }
+      html:not(.dark) ::-webkit-scrollbar-thumb {
+        background: #6366F1; /* brand-accent-blue */
+        border-radius: 4px;
+      }
+      html.dark ::-webkit-scrollbar-thumb {
+        background: #4F46E5; /* indigo-600 */
+        border-radius: 4px;
+      }
+      html:not(.dark) ::-webkit-scrollbar-thumb:hover {
+        background: #4F46E5; /* indigo-600 */
+      }
+      html.dark ::-webkit-scrollbar-thumb:hover {
+        background: #312E81; /* indigo-800 */
+      }
+
+      /* Custom slim scrollbar for card back content AND CHAT */
+      .custom-scrollbar-sm::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+      }
+      html:not(.dark) .custom-scrollbar-sm::-webkit-scrollbar-track {
+        background: rgba(226, 232, 240, 0.5); /* slate-200 with transparency */
+        border-radius: 3px;
+      }
+      html.dark .custom-scrollbar-sm::-webkit-scrollbar-track {
+        background: rgba(15, 23, 42, 0.3); /* slate-900 with transparency */
+        border-radius: 3px;
+      }
+      html:not(.dark) .custom-scrollbar-sm::-webkit-scrollbar-thumb {
+        background: #4F46E5; /* indigo-600 */
+        border-radius: 3px;
+      }
+      html.dark .custom-scrollbar-sm::-webkit-scrollbar-thumb {
+        background: #6366F1; /* brand-accent-blue */
+        border-radius: 3px;
+      }
+      html:not(.dark) .custom-scrollbar-sm::-webkit-scrollbar-thumb:hover {
+        background: #312E81; /* indigo-800 */
+      }
+      html.dark .custom-scrollbar-sm::-webkit-scrollbar-thumb:hover {
+        background: #4F46E5; /* indigo-600 (a bit darker shade of accent blue) */
+      }
+      /* For Firefox */
+      html:not(.dark) .custom-scrollbar-sm {
+        scrollbar-width: thin;
+        scrollbar-color: #4F46E5 rgba(226, 232, 240, 0.5);
+      }
+      html.dark .custom-scrollbar-sm {
+        scrollbar-width: thin;
+        scrollbar-color: #6366F1 rgba(15, 23, 42, 0.3);
+      }
+
+      /* Ensure line-clamp works */
+      .line-clamp-3 {
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
+      }
+    </style>
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@^19.1.0",
+    "react-dom/": "https://esm.sh/react-dom@^19.1.0/",
+    "react/": "https://esm.sh/react@^19.1.0/",
+    "@/Button": "/components/Button.tsx",
+    "@google/genai": "https://esm.sh/@google/genai@^1.3.0"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
 </head>
-<body class="bg-brand-dark text-brand-light-text antialiased">
-<div id="root"></div>
-<script type="module" src="/index.tsx"></script>
+<body class="antialiased transition-colors duration-300 ease-in-out">
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
 </body>
 </html>

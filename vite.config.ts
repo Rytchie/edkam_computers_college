@@ -9,5 +9,5 @@ export default defineConfig({
     react(),
     tailwindcss(),
   ],
-  base: import.meta.env.VITE_BASE_PATH || '/edkam_computers_college',
+  base: process.env.VITE_BASE_PATH || '/edkam_computers_college'
 })

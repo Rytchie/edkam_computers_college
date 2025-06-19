@@ -1,38 +1,172 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import Button from '../../Button';
-import { ChartBarIcon, AcademicCapIcon } from '../../../constants/constants';
+import { ChartBarIcon, AcademicCapIcon, ExclamationTriangleIcon } from '../../../constants/constants';
 
-const GradesSection: React.FC = () => {
+interface Grade {
+  id: string;
+  studentId: string; // From backend
+  courseId: string;  // From backend
+  courseName: string; // From backend - used instead of 'course'
+  assignment: string;
+  score: number;
+  maxScore: number;
+  feedback: string;
+}
+
+interface GradesSectionProps {
+  studentId: string;
+}
+
+const GradesSection: React.FC<GradesSectionProps> = ({ studentId }) => {
   const [activeSubTab, setActiveSubTab] = useState<'overview' | 'detailed' | 'gpa'>('overview');
+  const [grades, setGrades] = useState<Grade[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const dummyGrades = [
-    { id: 'g1', course: 'Full-Stack Web Development', assignment: 'HTML Basics', score: 85, maxScore: 100, feedback: 'Good effort, minor CSS fixes needed.' },
-    { id: 'g2', course: 'Full-Stack Web Development', assignment: 'JavaScript Quiz 1', score: 92, maxScore: 100, feedback: 'Excellent!' },
-    { id: 'g3', course: 'Data Science & ML', assignment: 'Python Functions Task', score: 78, maxScore: 100, feedback: 'Review loops for efficiency.' },
-  ];
+  useEffect(() => {
+    const fetchGrades = async () => {
+      if (!studentId) {
+        setIsLoading(false);
+        setError("Student ID is not available to fetch grades.");
+        return;
+      }
+      setIsLoading(true);
+      setError(null);
+      try {
+        const response = await axios.get<Grade[]>(`http://localhost:3001/api/grades?studentId=${studentId}`);
+        setGrades(response.data);
+      } catch (err) {
+        console.error("Error fetching grades:", err);
+        setError('Failed to load grades. Please try again.');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchGrades();
+  }, [studentId]);
 
   const renderSubTabContent = () => {
+    // GPA and Progress are still based on dummy logic as per instructions
+    const calculateOverallProgress = () => {
+        if (grades.length === 0) return 0;
+        const totalScore = grades.reduce((acc, grade) => acc + grade.score, 0);
+        const totalMaxScore = grades.reduce((acc, grade) => acc + grade.maxScore, 0);
+        return totalMaxScore > 0 ? Math.round((totalScore / totalMaxScore) * 100) : 0;
+    };
+
+    const estimateGpa = () => {
+        // Simplified GPA estimation - assumes all courses have same weight
+        // and a direct mapping from percentage to GPA points.
+        if (grades.length === 0) return "N/A";
+        let totalPoints = 0;
+        grades.forEach(grade => {
+            const percentage = (grade.score / grade.maxScore) * 100;
+            if (percentage >= 90) totalPoints += 4.0;
+            else if (percentage >= 80) totalPoints += 3.0;
+            else if (percentage >= 70) totalPoints += 2.0;
+            else if (percentage >= 60) totalPoints += 1.0;
+        });
+        return grades.length > 0 ? (totalPoints / grades.length).toFixed(2) : "N/A";
+    };
+
+    const overallProgress = calculateOverallProgress();
+    const gpa = estimateGpa();
+
+
     switch (activeSubTab) {
       case 'overview':
+        if (isLoading) return <p className="text-center text-brand-text-light-secondary dark:text-brand-secondary-text">Loading grades overview...</p>;
+        if (error) return <p className="text-center text-red-500 bg-red-100 dark:bg-red-700/30 p-3 rounded-md">{error}</p>;
+
         return (
           <div className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-brand-bg-light-card dark:bg-slate-700/50 p-4 rounded-lg shadow">
-                <h4 className="text-lg font-semibold text-brand-accent-purple mb-2">Overall Progress</h4>
-                <div className="w-full bg-slate-200 dark:bg-slate-600 rounded-full h-6">
-                  <div className="bg-brand-accent-blue h-6 rounded-full text-xs font-medium text-white text-center p-0.5 leading-none" style={{ width: '75%' }}>
-                    75%
+            {grades.length === 0 && !isLoading && (
+                 <div className="text-center py-10 bg-brand-bg-light-card dark:bg-slate-700/50 p-4 rounded-lg shadow">
+                    <AcademicCapIcon className="w-16 h-16 text-brand-accent-purple mx-auto mb-4 opacity-60" />
+                    <p className="text-brand-text-light-secondary dark:text-brand-secondary-text">No grades data available to show overview.</p>
+                </div>
+            )}
+            {grades.length > 0 && (
+              <>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="bg-brand-bg-light-card dark:bg-slate-700/50 p-4 rounded-lg shadow">
+                    <h4 className="text-lg font-semibold text-brand-accent-purple mb-2">Overall Progress</h4>
+                    <div className="w-full bg-slate-200 dark:bg-slate-600 rounded-full h-6">
+                      <div
+                        className="bg-brand-accent-blue h-6 rounded-full text-xs font-medium text-white text-center p-0.5 leading-none"
+                        style={{ width: `${overallProgress}%` }}
+                      >
+                        {overallProgress}%
+                      </div>
+                    </div>
+                    <p className="text-xs text-brand-text-light-secondary dark:text-brand-secondary-text mt-1">Across all graded assignments.</p>
+                  </div>
+                  <div className="bg-brand-bg-light-card dark:bg-slate-700/50 p-4 rounded-lg shadow">
+                    <h4 className="text-lg font-semibold text-brand-accent-purple mb-2">Current GPA (Est.)</h4>
+                    <p className="text-3xl font-bold text-brand-text-light-primary dark:text-white">{gpa} <span className="text-base font-normal">/ 4.0</span></p>
+                    <p className="text-xs text-brand-text-light-secondary dark:text-brand-secondary-text mt-1">Based on completed assignments.</p>
                   </div>
                 </div>
-                <p className="text-xs text-brand-text-light-secondary dark:text-brand-secondary-text mt-1">Across all courses.</p>
+                <div>
+                  <h4 className="text-lg font-semibold text-brand-text-light-primary dark:text-white mb-2">Performance Trends</h4>
+                  <div className="bg-brand-bg-light-card dark:bg-slate-700/50 p-4 rounded-lg shadow min-h-[200px] flex items-center justify-center">
+                    <p className="text-brand-text-light-secondary dark:text-brand-secondary-text">
+                      <ChartBarIcon className="w-12 h-12 text-brand-accent-blue mx-auto mb-2 opacity-50" />
+                      Visual charts for performance trends coming soon.
+                    </p>
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
+        );
+      case 'detailed':
+        if (isLoading) return <p className="text-center text-brand-text-light-secondary dark:text-brand-secondary-text">Loading detailed grades...</p>;
+        if (error) return <p className="text-center text-red-500 bg-red-100 dark:bg-red-700/30 p-3 rounded-md">{error}</p>;
+
+        return (
+          <div className="overflow-x-auto">
+            <h4 className="text-lg font-semibold text-brand-text-light-primary dark:text-white mb-3">Detailed Grades</h4>
+            {grades.length === 0 ? (
+              <div className="text-center py-10 bg-brand-bg-light-card dark:bg-slate-700/50 p-4 rounded-lg shadow">
+                <ExclamationTriangleIcon className="w-12 h-12 text-yellow-500 mx-auto mb-3 opacity-70" />
+                <p className="text-brand-text-light-secondary dark:text-brand-secondary-text">No detailed grades found for {studentId}.</p>
               </div>
-              <div className="bg-brand-bg-light-card dark:bg-slate-700/50 p-4 rounded-lg shadow">
-                <h4 className="text-lg font-semibold text-brand-accent-purple mb-2">Current GPA (Est.)</h4>
-                <p className="text-3xl font-bold text-brand-text-light-primary dark:text-white">3.65 <span className="text-base font-normal">/ 4.0</span></p>
-                <p className="text-xs text-brand-text-light-secondary dark:text-brand-secondary-text mt-1">Based on completed assignments.</p>
-              </div>
-            </div>
-            <div>
+            ) : (
+              <>
+                <table className="min-w-full bg-brand-bg-light-card dark:bg-slate-700/50 shadow rounded-lg">
+                  <thead className="bg-slate-100 dark:bg-slate-700">
+                    <tr>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-brand-text-light-secondary dark:text-brand-secondary-text uppercase tracking-wider">Course</th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-brand-text-light-secondary dark:text-brand-secondary-text uppercase tracking-wider">Assignment</th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-brand-text-light-secondary dark:text-brand-secondary-text uppercase tracking-wider">Score</th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-brand-text-light-secondary dark:text-brand-secondary-text uppercase tracking-wider">Max</th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-brand-text-light-secondary dark:text-brand-secondary-text uppercase tracking-wider">Feedback</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-200 dark:divide-slate-600">
+                    {grades.map(grade => (
+                      <tr key={grade.id}>
+                        <td className="px-4 py-3 whitespace-nowrap text-sm text-brand-text-light-primary dark:text-brand-light-text">{grade.courseName}</td>
+                        <td className="px-4 py-3 whitespace-nowrap text-sm text-brand-text-light-primary dark:text-brand-light-text">{grade.assignment}</td>
+                        <td className="px-4 py-3 whitespace-nowrap text-sm font-semibold text-brand-accent-blue">{grade.score}</td>
+                        <td className="px-4 py-3 whitespace-nowrap text-sm text-brand-text-light-secondary dark:text-brand-secondary-text">{grade.maxScore}</td>
+                        <td className="px-4 py-3 text-sm text-brand-text-light-secondary dark:text-brand-secondary-text">{grade.feedback}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700 rounded-lg text-sm text-blue-700 dark:text-blue-300">
+                  Assignment score breakdowns and detailed feedback will be accessible here.
+                </div>
+              </>
+            )}
+          </div>
+        );
+      case 'gpa':
+        // GPA Calculator is a placeholder as per instructions
               <h4 className="text-lg font-semibold text-brand-text-light-primary dark:text-white mb-2">Performance Trends</h4>
               <div className="bg-brand-bg-light-card dark:bg-slate-700/50 p-4 rounded-lg shadow min-h-[200px] flex items-center justify-center">
                 <p className="text-brand-text-light-secondary dark:text-brand-secondary-text">

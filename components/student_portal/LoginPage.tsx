@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import axios from 'axios';
 import Button from '../Button';
 
 interface LoginPageProps {
@@ -16,13 +17,31 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess, openApplicationMo
     e.preventDefault();
     setError('');
 
-    if (studentId === 'student' && password === 'password') {
-      onLoginSuccess(studentId);
-    } else if (!studentId || !password) {
+    // Basic client-side validation
+    if (!studentId || !password) {
       setError('Please enter both Student ID and Password.');
+      return;
     }
-    else {
-      setError('Invalid Student ID or Password.');
+
+    try {
+      const response = await axios.post('http://localhost:3001/api/login', {
+        studentId,
+        password,
+      });
+
+      if (response.status === 200 && response.data.success) {
+        onLoginSuccess(response.data.student.studentId);
+      } else {
+        // This case might not be reached if server always returns non-200 for errors
+        setError(response.data.message || 'Login failed. Please try again.');
+      }
+    } catch (err) {
+      if (axios.isAxiosError(err) && err.response) {
+        setError(err.response.data.message || 'Invalid Student ID or Password.');
+      } else {
+        setError('An unexpected error occurred. Please try again.');
+        console.error('Login error:', err);
+      }
     }
   };
 

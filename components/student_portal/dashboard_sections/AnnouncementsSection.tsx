@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { BellIcon, ExclamationTriangleIcon } from '../../../constants/constants';
 
 type AnnouncementFilter = 'all' | 'unread' | 'urgent' | 'course';
 
-interface DummyAnnouncement {
+interface Announcement { // Renamed from DummyAnnouncement for clarity
   id: string;
   title: string;
   date: string;
@@ -15,20 +16,37 @@ interface DummyAnnouncement {
 
 const AnnouncementsSection: React.FC = () => {
   const [activeFilter, setActiveFilter] = useState<AnnouncementFilter>('all');
+  const [announcements, setAnnouncements] = useState<Announcement[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const dummyAnnouncements: DummyAnnouncement[] = [
-    { id: 'a1', title: 'Mid-term Exam Schedule Update', date: '2024-10-25', contentSnippet: 'Please note the updated schedule for mid-term exams...', priority: 'high', isRead: false, course: 'All Courses' },
-    { id: 'a2', title: 'Guest Lecture: AI in Web Development', date: '2024-10-22', contentSnippet: 'Join us for an exciting guest lecture next Friday.', priority: 'medium', isRead: true, course: 'Full-Stack Web Development' },
-    { id: 'a3', title: 'Library System Maintenance', date: '2024-10-20', contentSnippet: 'The online library portal will be down for maintenance this weekend.', priority: 'low', isRead: true },
-    { id: 'a4', title: 'New Resources for Data Science', date: '2024-10-18', contentSnippet: 'Check out the new datasets and articles added to the Data Science course materials.', priority: 'medium', isRead: false, course: 'Data Science & ML'},
-  ];
+  useEffect(() => {
+    const fetchAnnouncements = async () => {
+      setIsLoading(true);
+      setError(null);
+      try {
+        const response = await axios.get<Announcement[]>('http://localhost:3001/api/announcements');
+        setAnnouncements(response.data);
+      } catch (err) {
+        console.error("Error fetching announcements:", err);
+        setError('Failed to load announcements. Please try again.');
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-  const filteredAnnouncements = dummyAnnouncements.filter(ann => {
+    fetchAnnouncements();
+  }, []);
+
+  const filteredAnnouncements = announcements.filter(ann => {
     if (activeFilter === 'unread') return !ann.isRead;
     if (activeFilter === 'urgent') return ann.priority === 'high';
-    // 'course' filter would need more logic if we had actual course data
+    // 'course' filter would need more logic if we had actual course data and selected course
     return true; 
   });
+
+  // Update unread count based on fetched data
+  const unreadCount = announcements.filter(a => !a.isRead).length;
 
   const FilterButton: React.FC<{filterId: AnnouncementFilter, label: string}> = ({filterId, label}) => (
      <button
@@ -54,13 +72,16 @@ const AnnouncementsSection: React.FC = () => {
         </p>
         <div className="flex space-x-2 overflow-x-auto pb-2 custom-scrollbar-sm">
           <FilterButton filterId="all" label="All" />
-          <FilterButton filterId="unread" label={`Unread (${dummyAnnouncements.filter(a => !a.isRead).length})`} />
+          <FilterButton filterId="unread" label={`Unread (${unreadCount})`} />
           <FilterButton filterId="urgent" label="Urgent" />
           <FilterButton filterId="course" label="Course Specific (WIP)" />
         </div>
       </div>
 
-      {filteredAnnouncements.length > 0 ? (
+      {isLoading && <p className="text-center text-brand-text-light-secondary dark:text-brand-secondary-text">Loading announcements...</p>}
+      {error && <p className="text-center text-red-500 bg-red-100 dark:bg-red-700/30 p-3 rounded-md">{error}</p>}
+
+      {!isLoading && !error && filteredAnnouncements.length > 0 && (
         <div className="space-y-4">
           {filteredAnnouncements.map(ann => (
             <div key={ann.id} className={`p-4 rounded-lg shadow border-l-4 ${
@@ -91,10 +112,14 @@ const AnnouncementsSection: React.FC = () => {
             </div>
           ))}
         </div>
-      ) : (
-        <div className="text-center py-10">
+      )}
+
+      {!isLoading && !error && filteredAnnouncements.length === 0 && (
+         <div className="text-center py-10">
           <BellIcon className="w-16 h-16 text-brand-accent-purple mx-auto mb-4 opacity-50" />
-          <p className="text-brand-text-light-secondary dark:text-brand-secondary-text">No announcements matching your filter.</p>
+          <p className="text-brand-text-light-secondary dark:text-brand-secondary-text">
+            {announcements.length === 0 ? "No announcements available at the moment." : "No announcements matching your filter."}
+          </p>
         </div>
       )}
     </div>

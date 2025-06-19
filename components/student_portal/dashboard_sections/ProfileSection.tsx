@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import Button from '../../Button';
 import { UserCircleIcon, PencilIcon, CogIcon, UploadIcon } from '../../../constants/constants';
 
@@ -9,20 +10,84 @@ interface ProfileSectionProps {
 const ProfileSection: React.FC<ProfileSectionProps> = ({ studentId }) => {
   const [activeSubTab, setActiveSubTab] = useState<'personal' | 'security' | 'settings'>('personal');
   
-  // Dummy data
   const [profileData, setProfileData] = useState({
-    fullName: 'Jane Doe', // Would be fetched based on studentId
-    email: `${studentId}@example.com`, // Placeholder
-    phone: '+254 700 123456',
-    address: 'P.O. Box 123, Nakuru',
-    avatarUrl: 'https://picsum.photos/seed/student_avatar/200/200' // Placeholder avatar
+    name: '', // Changed from fullName
+    email: '',
+    phone: '',
+    address: '',
+    avatarUrl: ''
   });
+  const [initialProfileData, setInitialProfileData] = useState(profileData); // For cancel functionality
   const [isEditing, setIsEditing] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchProfile = async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const response = await axios.get(`http://localhost:3001/api/profile/${studentId}`);
+      if (response.data) {
+        setProfileData(response.data);
+        setInitialProfileData(response.data); // Store initial data for cancel
+      } else {
+        setError('Profile data not found.');
+      }
+    } catch (err) {
+      console.error("Error fetching profile:", err);
+      setError('Failed to fetch profile data. Please try again.');
+      // Set some default structure if profile is not found or error occurs
+      const defaultProfile = { name: 'N/A', email: 'N/A', phone: 'N/A', address: 'N/A', avatarUrl: `https://ui-avatars.com/api/?name=?&background=random&size=128` };
+      setProfileData(defaultProfile);
+      setInitialProfileData(defaultProfile);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (studentId) {
+      fetchProfile();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [studentId]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setProfileData(prev => ({ ...prev, [name]: value }));
   };
+
+  const handleSaveChanges = async () => {
+    setError(null);
+    try {
+      const response = await axios.put(`http://localhost:3001/api/profile/${studentId}`, profileData);
+      if (response.status === 200 && response.data) {
+        setProfileData(response.data);
+        setInitialProfileData(response.data); // Update initial data to new saved state
+        setIsEditing(false);
+        alert('Profile updated successfully!');
+      } else {
+        throw new Error('Failed to save profile.');
+      }
+    } catch (err) {
+      console.error("Error saving profile:", err);
+      let errorMessage = 'Failed to save profile. Please try again.';
+      if (axios.isAxiosError(err) && err.response) {
+        errorMessage = err.response.data.message || errorMessage;
+      }
+      setError(errorMessage);
+      alert(errorMessage);
+    }
+  };
+
+  const handleCancelEdit = () => {
+    setProfileData(initialProfileData); // Reset to last fetched/saved data
+    setIsEditing(false);
+    setError(null);
+  };
+
+  // Ensure profileData is defined before trying to access its properties
+  const currentName = profileData?.name || 'Loading...';
 
   const ProfileField: React.FC<{ label: string; value: string; name: keyof typeof profileData; type?: string; isTextarea?: boolean }> = 
   ({ label, value, name, type = "text", isTextarea = false }) => (
@@ -54,16 +119,27 @@ const ProfileSection: React.FC<ProfileSectionProps> = ({ studentId }) => {
     </div>
   );
 
-
   const renderSubTabContent = () => {
+    if (isLoading) {
+      return <p className="text-center text-brand-text-light-secondary dark:text-brand-secondary-text">Loading profile...</p>;
+    }
+    if (error && !isEditing) { // Show error prominently if not in editing mode
+        return <p className="text-center text-red-500 bg-red-100 dark:bg-red-700/30 p-3 rounded-md">{error}</p>;
+    }
+
     switch (activeSubTab) {
       case 'personal':
         return (
           <div className="space-y-6">
+            {error && isEditing && ( // Show error as alert when editing
+                <div className="p-3 bg-red-100 dark:bg-red-600/30 text-red-700 dark:text-red-300 border border-red-300 dark:border-red-500 rounded-md text-sm" role="alert">
+                    {error}
+                </div>
+            )}
             <div className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-6">
               <div className="relative">
                 <img 
-                    src={profileData.avatarUrl || `https://ui-avatars.com/api/?name=${profileData.fullName.replace(' ','+')}&background=random&size=128`} 
+                    src={profileData.avatarUrl || `https://ui-avatars.com/api/?name=${currentName.replace(' ','+')}&background=random&size=128`}
                     alt="Student Avatar" 
                     className="w-24 h-24 sm:w-32 sm:h-32 rounded-full object-cover shadow-md border-2 border-brand-accent-purple"
                 />
@@ -75,12 +151,12 @@ const ProfileSection: React.FC<ProfileSectionProps> = ({ studentId }) => {
                 )}
               </div>
               <div>
-                <h3 className="text-2xl font-semibold text-brand-text-light-primary dark:text-white">{profileData.fullName}</h3>
+                <h3 className="text-2xl font-semibold text-brand-text-light-primary dark:text-white">{currentName}</h3>
                 <p className="text-brand-text-light-secondary dark:text-brand-secondary-text">Student ID: {studentId}</p>
               </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 border-t border-brand-border-light dark:border-slate-700 pt-6">
-              <ProfileField label="Full Name" name="fullName" value={profileData.fullName} />
+              <ProfileField label="Full Name" name="name" value={profileData.name} />
               <ProfileField label="Email Address" name="email" value={profileData.email} type="email" />
               <ProfileField label="Phone Number" name="phone" value={profileData.phone} type="tel" />
               <ProfileField label="Address" name="address" value={profileData.address} isTextarea={true} />
@@ -88,11 +164,11 @@ const ProfileSection: React.FC<ProfileSectionProps> = ({ studentId }) => {
             <div className="flex justify-end mt-4">
                 {isEditing ? (
                     <div className="space-x-2">
-                        <Button variant="outline" onClick={() => { setIsEditing(false); /* TODO: Reset changes or refetch data */ }}>Cancel</Button>
-                        <Button variant="primary" onClick={() => { setIsEditing(false); alert('Profile Saved (placeholder)'); }}>Save Changes</Button>
+                        <Button variant="outline" onClick={handleCancelEdit}>Cancel</Button>
+                        <Button variant="primary" onClick={handleSaveChanges}>Save Changes</Button>
                     </div>
                 ) : (
-                    <Button variant="primary" onClick={() => setIsEditing(true)} >
+                    <Button variant="primary" onClick={() => { setIsEditing(true); setError(null); }} >
                         <PencilIcon className="w-4 h-4 mr-2"/> Edit Profile
                     </Button>
                 )}

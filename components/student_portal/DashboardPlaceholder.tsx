@@ -21,7 +21,7 @@ const DashboardPlaceholder: React.FC<DashboardPlaceholderProps> = ({ studentId, 
       case 'courses':
         return <CourseMaterialsSection />;
       case 'grades':
-        return <GradesSection />;
+        return <GradesSection studentId={studentId} />;
       case 'announcements':
         return <AnnouncementsSection />;
       case 'profile':
